@@ -17,7 +17,6 @@ class SettingsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Settings"
         view.backgroundColor = .systemBackground
 
         segmentedControl.selectedSegmentIndex = UIStyleSwitcher.currentStyle == .uikit ? 0 : 1

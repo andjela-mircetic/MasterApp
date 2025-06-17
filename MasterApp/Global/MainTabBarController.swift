@@ -25,5 +25,18 @@ class MainTabBarController: UITabBarController {
         settings.tabBarItem = UITabBarItem(title: "Settings", image: UIImage(systemName: "gear"), tag: 3)
 
         viewControllers = [home, search, favorites, settings]
+        configureTabBarAppearance()
+    }
+
+    private func configureTabBarAppearance() {
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .systemBackground
+
+        tabBar.standardAppearance = appearance
+
+        if #available(iOS 15.0, *) {
+            tabBar.scrollEdgeAppearance = appearance
+        }
     }
 }

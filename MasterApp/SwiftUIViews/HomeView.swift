@@ -8,9 +8,27 @@
 import SwiftUI
 
 struct HomeSwiftUIView: View {
+    @StateObject private var viewModel = HomeViewModel()
+
     var body: some View {
-        Text("Home - SwiftUI")
-            .font(.largeTitle)
-            .padding()
+        //NavigationView {
+            List(viewModel.recipes, id: \.idMeal) { recipe in
+                VStack(alignment: .leading) {
+                    Text(recipe.strMeal).font(.headline)
+                    if let category = recipe.strCategory {
+                        Text(category).font(.subheadline).foregroundColor(.gray)
+                    }
+                }
+            }
+           // .navigationTitle("Home")
+            .task {
+                await viewModel.loadRecipes()
+            }
+            .overlay {
+                if viewModel.isLoading {
+                    ProgressView("Loading...")
+                }
+            }
+       // }
     }
 }

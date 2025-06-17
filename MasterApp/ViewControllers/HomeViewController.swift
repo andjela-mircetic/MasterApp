@@ -8,11 +8,13 @@
 import UIKit
 import SwiftUI
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+
+    private var recipes: [Recipe] = []
+    private let tableView = UITableView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Home"
         view.backgroundColor = .systemBackground
 
         if UIStyleSwitcher.currentStyle == .swiftui {
@@ -24,19 +26,47 @@ class HomeViewController: UIViewController {
             hostingVC.didMove(toParent: self)
         } else {
             setupUIKitUI()
+            loadRecipes()
         }
     }
 
     private func setupUIKitUI() {
-        let label = UILabel()
-        label.text = "Home - UIKit"
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(tableView)
+        tableView.dataSource = self
+        tableView.delegate = self
 
-        view.addSubview(label)
         NSLayoutConstraint.activate([
-            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            label.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
+    }
+
+    private func loadRecipes() {
+        Task {
+            do {
+                self.recipes = try await MealDBService.shared.fetchRandomRecipes(count: 20)
+                self.tableView.reloadData()
+            } catch {
+                print("Error fetching recipes: \(error)")
+            }
+        }
+    }
+
+    // MARK: - TableView DataSource
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        recipes.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let recipe = recipes[indexPath.row]
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
+        cell.textLabel?.text = recipe.strMeal
+        cell.detailTextLabel?.text = recipe.strCategory ?? ""
+        cell.accessoryType = .disclosureIndicator
+        return cell
     }
 }
