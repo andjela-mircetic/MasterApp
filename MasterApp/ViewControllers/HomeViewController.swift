@@ -26,6 +26,10 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
             hostingVC.didMove(toParent: self)
         } else {
             setupUIKitUI()
+            
+            tableView.register(RecipeTableViewCell.self, forCellReuseIdentifier: RecipeTableViewCell.reuseIdentifier)
+            tableView.separatorStyle = .none
+            
             loadRecipes()
         }
     }
@@ -63,10 +67,15 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let recipe = recipes[indexPath.row]
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-        cell.textLabel?.text = recipe.strMeal
-        cell.detailTextLabel?.text = recipe.strCategory ?? ""
-        cell.accessoryType = .disclosureIndicator
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: RecipeTableViewCell.reuseIdentifier, for: indexPath) as? RecipeTableViewCell else {
+            return UITableViewCell()
+        }
+        cell.configure(with: recipe)
+        cell.selectionStyle = .none
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 120
     }
 }
