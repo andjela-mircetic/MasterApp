@@ -89,6 +89,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                     let button = UIButton(type: .system)
                     button.setTitle(category.strCategory, for: .normal)
                     button.backgroundColor = .systemGray6
+                    button.layer.cornerRadius = 6
                     button.addAction(UIAction { [weak self] _ in
                         Task { await self?.viewModel.searchByCategory(category) }
                     }, for: .touchUpInside)

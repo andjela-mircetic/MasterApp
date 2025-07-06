@@ -16,13 +16,20 @@ class SearchViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var error: String?
     
+    private var skipDebouncedSearch = false
+    
     private var cancellables = Set<AnyCancellable>()
 
     init() {
         $query
             .debounce(for: .milliseconds(500), scheduler: RunLoop.main)
             .sink { [weak self] query in
-                Task { await self?.search(query: query) }
+                guard let self = self else { return }
+                if self.skipDebouncedSearch {
+                    self.skipDebouncedSearch = false
+                    return
+                }
+                Task { await self.search(query: query) }
             }
             .store(in: &cancellables)
     }
@@ -48,6 +55,7 @@ class SearchViewModel: ObservableObject {
     
     func searchByCategory(_ category: Category) async {
         isLoading = true
+        skipDebouncedSearch = true
         query = ""
         do {
             recipes = try await MealDBService.shared.fetchRecipesByCategory(category.strCategory)
