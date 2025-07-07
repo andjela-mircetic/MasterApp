@@ -7,8 +7,16 @@
 
 import Foundation
 
-class MealDBService {
-    static let shared = MealDBService()
+protocol MealDBServiceProtocol {
+    func fetchCategories() async throws -> [Category]
+    func searchRecipes(query: String) async throws -> [Recipe]
+    func fetchRecipesByCategory(_ category: String) async throws -> [Recipe]
+    func fetchRandomRecipes(count: Int) async throws -> [Recipe]
+    func fetchMealDetail(id: String) async throws -> MealDetail?
+}
+
+class MealDBService: MealDBServiceProtocol {
+    static var shared: MealDBServiceProtocol = MealDBService()
     private let session = URLSession.shared
 
     private init() {}

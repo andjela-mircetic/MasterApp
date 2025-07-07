@@ -30,6 +30,16 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		9E6A59DB2E1C21F500053316 /* Exceptions for "MasterApp" folder in "MasterAppTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Global/MealDBService.swift,
+				Models/Category.swift,
+				Models/MealDetail.swift,
+				Models/Recipe.swift,
+			);
+			target = 9EEE0A6D2DFF4EBA00774C6E /* MasterAppTests */;
+		};
 		9EEE0A802DFF4EBA00774C6E /* Exceptions for "MasterApp" folder in "MasterApp" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -44,6 +54,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				9EEE0A802DFF4EBA00774C6E /* Exceptions for "MasterApp" folder in "MasterApp" target */,
+				9E6A59DB2E1C21F500053316 /* Exceptions for "MasterApp" folder in "MasterAppTests" target */,
 			);
 			path = MasterApp;
 			sourceTree = "<group>";
