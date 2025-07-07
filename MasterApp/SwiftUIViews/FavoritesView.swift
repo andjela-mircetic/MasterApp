@@ -7,19 +7,22 @@
 
 import SwiftUI
 
+import SwiftUI
+
 struct FavoritesView: View {
-    @State private var favorites: [Recipe] = []
+    @ObservedObject private var favoritesManager = FavoritesManager.shared
     let columns = [GridItem(.flexible()), GridItem(.flexible())]
 
     var body: some View {
         NavigationView {
-            if favorites.isEmpty {
+            if favoritesManager.favoriteIDs.isEmpty {
                 VStack {
                     Image(systemName: "heart.slash")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 100, height: 100)
                         .foregroundColor(.gray)
+
                     Text("No favorites yet.")
                         .font(.headline)
                         .foregroundColor(.gray)
@@ -29,49 +32,66 @@ struct FavoritesView: View {
                 .background(Color(.systemBackground))
             } else {
                 ScrollView {
-                    LazyVGrid(columns: columns, spacing: 16) {
-                        ForEach(favorites, id: \.idMeal) { meal in
-                            VStack(alignment: .trailing) {
-                                ZStack(alignment: .topTrailing) {
-                                    AsyncImage(url: URL(string: meal.strMealThumb ?? "")) { image in
-                                        image
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fill)
-                                    } placeholder: {
-                                        Color.gray.opacity(0.2)
+                    LazyVStack(alignment: .leading, spacing: 16) {
+                        ForEach(favoritesManager.getFavorites(), id: \.idMeal) { meal in
+                            NavigationLink(destination: MealDetailView(mealID: meal.idMeal)) {
+                                HStack(alignment: .top, spacing: 16) {
+                                    AsyncImage(url: URL(string: meal.strMealThumb ?? "")) { phase in
+                                        switch phase {
+                                        case .empty:
+                                            ProgressView()
+                                                .frame(width: 80, height: 80)
+                                        case .success(let image):
+                                            image
+                                                .resizable()
+                                                .scaledToFill()
+                                                .frame(width: 80, height: 80)
+                                                .clipped()
+                                                .cornerRadius(8)
+                                        case .failure:
+                                            Image(systemName: "photo")
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(width: 80, height: 80)
+                                                .foregroundColor(.gray)
+                                        @unknown default:
+                                            EmptyView()
+                                        }
                                     }
-                                    .frame(height: 120)
-                                    .clipped()
 
-                                    Button(action: {
-                                        FavoritesManager.shared.toggleFavorite(meal)
-                                        favorites = FavoritesManager.shared.getFavorites()
-                                    }) {
-                                        Image(systemName: FavoritesManager.shared.isFavorite(meal) ? "heart.fill" : "heart")
-                                            .foregroundColor(.red)
-                                            .padding(8)
-                                            .background(Color.white.opacity(0.7))
-                                            .clipShape(Circle())
+                                    VStack(alignment: .leading, spacing: 8) {
+                                        Text(meal.strMeal)
+                                            .font(.headline)
+
+                                        if let category = meal.strCategory {
+                                            Text(category)
+                                                .font(.subheadline)
+                                                .foregroundColor(.gray)
+                                        }
+
+                                        Button(action: {
+                                            favoritesManager.toggleFavorite(meal)
+                                        }) {
+                                            Image(systemName: favoritesManager.isFavorite(meal) ? "heart.fill" : "heart")
+                                                .foregroundColor(.red)
+                                        }
+                                        .buttonStyle(BorderlessButtonStyle())
                                     }
-                                    .padding(6)
+
+                                    Spacer()
                                 }
-
-                                Text(meal.strMeal)
-                                    .font(.caption)
-                                    .multilineTextAlignment(.center)
-                                    .padding([.horizontal, .bottom], 4)
+                                .padding()
+                                .background(Color(.systemBackground))
+                                .cornerRadius(12)
+                                .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
                             }
-                            .background(Color(.secondarySystemBackground))
-                            .cornerRadius(8)
+                            .buttonStyle(PlainButtonStyle())
                         }
                     }
                     .padding()
                 }
+                .navigationTitle("Favorites")
             }
-        }
-        //.navigationTitle("Favorites")
-        .onAppear {
-            favorites = FavoritesManager.shared.getFavorites()
         }
     }
 }

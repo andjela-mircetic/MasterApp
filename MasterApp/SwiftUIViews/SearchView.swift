@@ -39,13 +39,20 @@ struct SearchSwiftUIView: View {
                         .padding()
                 } else {
                     List(viewModel.recipes, id: \.idMeal) { recipe in
-                        VStack(alignment: .leading) {
-                            Text(recipe.strMeal).font(.headline)
-                            if let category = recipe.strCategory {
-                                Text(category).font(.subheadline).foregroundColor(.gray)
+                        NavigationLink(destination: MealDetailView(mealID: recipe.idMeal)) {
+                            VStack(alignment: .leading) {
+                                Text(recipe.strMeal)
+                                    .font(.headline)
+                                
+                                if let category = recipe.strCategory {
+                                    Text(category)
+                                        .font(.subheadline)
+                                        .foregroundColor(.gray)
+                                }
                             }
                         }
                     }
+                    .listStyle(.plain)
                 }
             }
             .navigationTitle("Search")
@@ -56,3 +63,4 @@ struct SearchSwiftUIView: View {
         }
     }
 }
+

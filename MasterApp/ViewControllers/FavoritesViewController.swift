@@ -78,9 +78,9 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let meal = favorites[indexPath.item]
-       // let vc = MealDetailViewController(meal: meal)
-       // navigationController?.pushViewController(vc, animated: true)
+        let selectedMeal = favorites[indexPath.row]
+        let detailVC = MealDetailViewController(mealID: selectedMeal.idMeal)
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }
 

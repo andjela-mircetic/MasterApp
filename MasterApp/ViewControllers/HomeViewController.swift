@@ -78,4 +78,10 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 120
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedMeal = recipes[indexPath.row]
+        let detailVC = MealDetailViewController(mealID: selectedMeal.idMeal)
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
 }

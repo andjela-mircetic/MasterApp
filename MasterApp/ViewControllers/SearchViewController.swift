@@ -113,6 +113,12 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedMeal = viewModel.recipes[indexPath.row]
+        let detailVC = MealDetailViewController(mealID: selectedMeal.idMeal)
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
+    
     // MARK: SearchBar
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
