@@ -58,4 +58,11 @@ extension MealDBService {
         let decoded = try JSONDecoder().decode(RandomRecipesResponse.self, from: data)
         return decoded.meals
     }
+    
+    func fetchMealDetail(id: String) async throws -> MealDetail? {
+          let url = URL(string: "https://www.themealdb.com/api/json/v1/1/lookup.php?i=\(id)")!
+          let (data, _) = try await URLSession.shared.data(from: url)
+          let response = try JSONDecoder().decode(MealDetailResponse.self, from: data)
+          return response.meals.first
+      }
 }
