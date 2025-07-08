@@ -8,14 +8,13 @@ on:
 
 jobs:
   lint-and-test:
-    name: SwiftLint and Unit Tests
     runs-on: macos-13
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Xcode
+      - name: Set up Xcode 15.2
         run: sudo xcode-select -s /Applications/Xcode_15.2.app
 
       - name: Install SwiftLint
@@ -26,8 +25,7 @@ jobs:
 
       - name: Run Unit Tests
         run: |
-          cd MasterApp
           xcodebuild clean test \
-          -project MasterApp.xcodeproj \
-          -scheme MasterApp \
-          -destination 'platform=iOS Simulator,name=iPhone 14,OS=17.2'
+            -project MasterApp.xcodeproj \
+            -scheme MasterApp \
+            -destination 'platform=iOS Simulator,name=iPhone 14,OS=17.2'
