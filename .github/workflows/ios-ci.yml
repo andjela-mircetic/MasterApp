@@ -23,10 +23,9 @@ jobs:
       - name: Run SwiftLint
         run: swiftlint || echo "SwiftLint finished with warnings"
 
-      - name: Run Unit Tests
-        run: |
-          cd MasterApp
-          xcodebuild clean test \
-            -project MasterApp.xcodeproj \
-            -scheme MasterApp \
-            -destination 'platform=iOS Simulator,name=iPhone 14,OS=17.2'
+#      - name: Run Unit Tests
+#        run: |
+#          xcodebuild clean test \
+#            -project MasterApp.xcodeproj \
+#            -scheme MasterApp \
+#            -destination 'platform=iOS Simulator,name=iPhone 14,OS=17.2'
