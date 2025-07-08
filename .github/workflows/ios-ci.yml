@@ -29,3 +29,10 @@ jobs:
 #            -project MasterApp.xcodeproj \
 #            -scheme MasterApp \
 #            -destination 'platform=iOS Simulator,name=iPhone 14,OS=17.2'
+
+       - name: SonarCloud Scan
+       uses: SonarSource/sonarcloud-github-action@master
+       with:
+       projectBaseDir: .
+       env:
+       SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
