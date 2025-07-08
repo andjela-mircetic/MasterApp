@@ -23,6 +23,7 @@ jobs:
       - name: Run SwiftLint
         run: swiftlint || echo "SwiftLint finished with warnings"
 
+# Uncomment if unit tests are ready
 #      - name: Run Unit Tests
 #        run: |
 #          xcodebuild clean test \
@@ -30,9 +31,9 @@ jobs:
 #            -scheme MasterApp \
 #            -destination 'platform=iOS Simulator,name=iPhone 14,OS=17.2'
 
-       - name: SonarCloud Scan
-       uses: SonarSource/sonarcloud-github-action@master
-       with:
-       projectBaseDir: .
-       env:
-       SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        with:
+          projectBaseDir: .
+        env:
+          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
