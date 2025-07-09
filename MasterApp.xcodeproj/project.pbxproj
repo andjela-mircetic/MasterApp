@@ -29,6 +29,7 @@
 				Models/Category.swift,
 				Models/MealDetail.swift,
 				Models/Recipe.swift,
+				Models/UserCredentials.swift,
 			);
 			target = 9EEE0A6D2DFF4EBA00774C6E /* MasterAppTests */;
 		};
