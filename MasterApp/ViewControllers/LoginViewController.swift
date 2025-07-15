@@ -56,6 +56,8 @@ class LoginViewController: UIViewController {
         let password = passwordField.text ?? ""
 
         if CredentialManager.shared.validate(username: username, password: password) {
+            UserDefaults.standard.set(username, forKey: "loggedInUsername")
+            
             let tabBarController = MainTabBarController()
             UIApplication.shared.windows.first?.rootViewController = tabBarController
         } else {
